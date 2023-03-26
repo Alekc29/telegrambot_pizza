@@ -1,4 +1,4 @@
-import os
+import os, json, string
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
@@ -44,8 +44,13 @@ async def pizza_place_command(message: types.Message):
 
 @dp.message_handler()
 async def echo_send(message: types.Message):
-    await message.answer(message.text)
-
+    if {word.lower().translate(
+            str.maketrans('', '', string.punctuation)
+        ) for word in message.text.split(' ')}.intersection(
+            set(json.load(open('cenz.json')))
+        ) != set():
+        await message.reply('Маты запрещены!')
+        await message.delete()
 
 executor.start_polling(dp, skip_updates=True, # игнорировать сообщения офлайн
                        on_startup=on_startup) # функция запуска бота
