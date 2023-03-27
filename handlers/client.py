@@ -1,13 +1,15 @@
 from aiogram import Dispatcher, types
+from aiogram.types import ReplyKeyboardRemove
 
 from create_bot import bot, dp
-
+from keyboards import kb_client
 
 # @dp.message_handler(commands=['start', 'help'])
 async def command_start(message: types.Message):
     try:
         await bot.send_message(message.from_user.id,
-                           'Привет! я бот для пиццерии.')
+                           'Привет! я бот для пиццерии.',
+                           reply_markup=kb_client)
         await message.delete()
     except:
         await message.reply(
