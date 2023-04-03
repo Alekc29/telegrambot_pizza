@@ -71,6 +71,7 @@ instance/
 # Sphinx documentation
 docs/_build/
 cenz.txt
+pizza.db
 
 # PyBuilder
 target/

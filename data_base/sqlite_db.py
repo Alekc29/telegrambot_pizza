@@ -26,3 +26,12 @@ async def sql_read(message):
             ret[0],
             f'{ret[1]}\nОписание: {ret[2]}\nЦена {ret[3]}'
         )
+
+
+async def sql_read_all():
+    return cur.execute('SELECT * FROM menu').fetchall()
+
+
+async def sql_delete_command(data):
+    cur.execute('DELETE FROM menu WHERE name == ?', (data,))
+    base.commit()
