@@ -87,7 +87,7 @@ async def load_price(message: types.Message,
         await state.finish()
 
 
-# @dp.callback_query_handler(lambda x: x.data and x.data.startswith('del '))
+#@dp.callback_query_handler(text='del ')
 async def del_callback_run(callback_querry: CallbackQuery):
     await sqlite_db.sql_delete_command(callback_querry.data.replace('del ', ''))
     await callback_querry.answer(
@@ -114,6 +114,7 @@ async def delete_item(message: types.Message):
     
 
 def register_handlers_admin(dp: Dispatcher):
+    dp.register_callback_query_handler(del_callback_run, lambda x: x.data == x.data.startswith('del '))
     dp.register_message_handler(cm_start,
                                 commands=['Загрузить'],
                                 state=None)
@@ -124,12 +125,11 @@ def register_handlers_admin(dp: Dispatcher):
                                 Text(equals='отмена', ignore_case=True),
                                 state='*')
     dp.register_message_handler(load_photo,
-                                commands=['photo'],
+                                content_types=['photo'],
                                 state=FSMAdmin.photo)
     dp.register_message_handler(load_name, state=FSMAdmin.name)
     dp.register_message_handler(load_description, state=FSMAdmin.description)
-    dp.register_message_handler(load_price, state=FSMAdmin.price)
-    dp.register_callback_query_handler(del_callback_run ,lambda x: x.data and x.data.startswith('del '))
+    dp.register_message_handler(load_price, state=FSMAdmin.price)    
     dp.register_message_handler(delete_item, commands='Удалить')
     dp.register_message_handler(make_changes_command,
                                 commands=['moderator'],
